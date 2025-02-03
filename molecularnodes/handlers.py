@@ -50,10 +50,3 @@ def update_entities(scene):
                 entity.set_frame(frame_to_set)
             except NotImplementedError:
                 pass
-
-        else:
-            # this is the old method of updating the trajectories and is maintained for
-            # backwards compatibility # TODO: takeout for later release
-            entity._update_positions(scene.frame_current)
-            entity._update_selections()
-            entity._update_calculations()

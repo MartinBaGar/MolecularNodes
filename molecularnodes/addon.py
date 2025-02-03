@@ -12,7 +12,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import bpy
-from bpy.app.handlers import frame_change_pre, load_post, save_post
+from bpy.app.handlers import frame_change_pre, frame_change_post, load_post, save_post
 from bpy.props import PointerProperty, CollectionProperty
 from .handlers import update_entities
 from . import entities, operators, props, session, ui
@@ -62,10 +62,15 @@ def register():
 
     bpy.types.Scene.MNSession = session.MNSession()  # type: ignore
     bpy.types.Object.uuid = props.uuid_property  # type: ignore
-    bpy.types.Object.mn = PointerProperty(type=props.MolecularNodesObjectProperties)  # type: ignore
-    bpy.types.Scene.mn = PointerProperty(type=props.MolecularNodesSceneProperties)  # type: ignore
+    bpy.types.Object.mn = PointerProperty(
+        type=props.MolecularNodesObjectProperties)  # type: ignore
+    bpy.types.Scene.mn = PointerProperty(
+        type=props.MolecularNodesSceneProperties)  # type: ignore
     bpy.types.Object.mn_trajectory_selections = CollectionProperty(  # type: ignore
         type=props.TrajectorySelectionItem  # type: ignore
+    )
+    bpy.types.Scene.interaction_visualiser = PointerProperty(
+        type=entities.interaction.interaction.InteractionVisualiserProperties
     )
 
 
@@ -86,5 +91,6 @@ def unregister():
     frame_change_pre.remove(update_entities)
     del bpy.types.Scene.MNSession  # type: ignore
     del bpy.types.Scene.mn  # type: ignore
+    del bpy.types.Scene.interaction_visualiser  # type: ignore
     del bpy.types.Object.mn  # type: ignore
     del bpy.types.Object.mn_trajectory_selections  # type: ignore
